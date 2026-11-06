@@ -1,23 +1,24 @@
 const byId = (id) => document.getElementById(id);
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-const easeOut = 'cubic-bezier(.23, 1, .32, 1)';
 const runner = document.querySelector('.runner');
 const introGift = byId('introGift');
 const albumStart = byId('albumStart');
-const photo = byId('photo');
-const print = byId('print');
 const photoDeck = byId('photoDeck');
 const previous = byId('previous');
 const next = byId('next');
 const toGift = byId('toGift');
 const lastGift = byId('lastGift');
 const fade = byId('fade');
+const fireworksVideo = byId('fireworksVideo');
+const fireworksToggle = byId('fireworksToggle');
+const photoCases = [];
 
 let privateKey;
 let currentScene = byId('intro');
 let metadata;
 let index = 0;
 let turning = false;
+let fireworksEnabled = true;
 const pictures = new Map();
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, reduced.matches ? 0 : ms));
@@ -45,7 +46,7 @@ async function pictureUrl(name) {
 
 function loadPhoto(number) {
   if (!pictures.has(number)) {
-    const request = pictureUrl(`photo-${number + 1}`).catch((error) => {
+    const request = pictureUrl(metadata.photos[number].name).catch((error) => {
       pictures.delete(number);
       throw error;
     });
@@ -65,6 +66,7 @@ function activateScene(id, heading) {
   currentScene.hidden = false;
   window.scrollTo(0, 0);
   byId(heading).focus({ preventScroll: true });
+  syncFireworks();
 }
 
 async function crossfade(id, heading, light = false) {
@@ -86,7 +88,7 @@ async function init() {
   try {
     const raw = Uint8Array.from(atob(key.replace(/-/g, '+').replace(/_/g, '/')), (char) => char.charCodeAt(0));
     privateKey = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['decrypt']);
-    const [letter, face] = await Promise.all([decrypt('letter'), pictureUrl('head')]);
+    const [letter, face] = await Promise.all([decrypt('letter-v2'), pictureUrl('head-v2')]);
     metadata = JSON.parse(new TextDecoder().decode(letter));
     const paragraphs = metadata.letter.map((line) => {
       const paragraph = document.createElement('p');
@@ -104,13 +106,14 @@ async function init() {
 
 function startRunner() {
   runner.classList.add('ready');
-  void wait(1450).then(() => { introGift.disabled = false; });
+  void wait(1700).then(() => { introGift.disabled = false; });
 }
 
 introGift.addEventListener('click', async () => {
   introGift.disabled = true;
   introGift.classList.add('opening');
-  await wait(240);
+  byId('intro').classList.add('gift-zoom');
+  await wait(310);
   await crossfade('letterCover', 'coverTitle', true);
 });
 
@@ -119,12 +122,93 @@ byId('unroll').addEventListener('click', () => {
   void loadPhoto(1).catch(() => {});
 });
 
+function syncFireworks() {
+  const mayPlay = !reduced.matches && currentScene.id === 'album';
+  fireworksToggle.hidden = !mayPlay;
+  fireworksToggle.setAttribute('aria-pressed', String(fireworksEnabled));
+  if (mayPlay && fireworksEnabled && !document.hidden) {
+    void fireworksVideo.play().catch(() => {});
+  } else {
+    fireworksVideo.pause();
+  }
+}
+
+fireworksVideo.muted = true;
+fireworksToggle.addEventListener('click', () => {
+  fireworksEnabled = !fireworksEnabled;
+  syncFireworks();
+});
+document.addEventListener('visibilitychange', syncFireworks);
+reduced.addEventListener('change', syncFireworks);
+
+function prepareAlbum() {
+  if (photoCases.length) return;
+  const inserts = ['#462e5a', '#384653', '#37315f', '#5d393c', '#2b4843', '#443454', '#694b33', '#3f3551'];
+  const fragment = document.createDocumentFragment();
+  metadata.photos.forEach(({ description }, number) => {
+    const item = document.createElement('button');
+    const spine = document.createElement('span');
+    const window = document.createElement('span');
+    const image = document.createElement('img');
+    item.type = 'button';
+    item.className = 'photo-case';
+    item.tabIndex = -1;
+    item.setAttribute('aria-label', description);
+    item.style.setProperty('--insert', inserts[number % inserts.length]);
+    spine.className = 'case-spine';
+    window.className = 'case-window';
+    image.alt = '';
+    window.append(image);
+    item.append(spine, window);
+    item.addEventListener('click', () => void selectPhoto(number));
+    photoCases.push({ item, image });
+    fragment.append(item);
+  });
+  photoDeck.append(fragment);
+}
+
+function fillCase(number) {
+  const { image } = photoCases[number];
+  if (image.hasAttribute('src')) return Promise.resolve();
+  return loadPhoto(number).then((url) => { image.src = url; });
+}
+
+function arrangeCases() {
+  photoCases.forEach(({ item }, number) => {
+    const delta = number - index;
+    const distance = Math.abs(delta);
+    const active = distance === 0;
+    item.setAttribute('aria-current', String(active));
+    item.style.setProperty('--x', `calc(var(--case-gap) * ${delta})`);
+    item.style.setProperty('--y', active ? '-5px' : `${37 - 17 * delta}px`);
+    item.style.setProperty('--yaw', active ? '0deg' : '-45deg');
+    item.style.setProperty('--tilt', active ? '0deg' : '-12deg');
+    item.style.setProperty('--scale', active ? '1' : String(.85 - distance * .016));
+    item.style.setProperty('--layer', String(photoCases.length - distance + (active ? 2 : 0)));
+    item.style.setProperty('--visibility', active ? '1' : String(.95 - distance * .05));
+  });
+  fireworksVideo.style.setProperty('--sky-shift', `${(index - 3.5) * -2.5}px`);
+  byId('counter').textContent = `${index + 1} / ${photoCases.length}`;
+  previous.disabled = index === 0;
+  next.disabled = index === photoCases.length - 1;
+  toGift.hidden = !next.disabled;
+}
+
 albumStart.addEventListener('click', async () => {
   albumStart.disabled = true;
   try {
-    await renderPhoto(0);
+    prepareAlbum();
+    await fillCase(0);
+    index = 0;
+    arrangeCases();
     activateScene('album', 'albumTitle');
-    animatePrint(1);
+    const deckIntro = photoDeck.animate([
+      { opacity: .45, transform: 'translateY(5%) scale(.97)' },
+      { opacity: 1, transform: 'none' }
+    ], { duration: reduced.matches ? 0 : 480, easing: 'cubic-bezier(.23, 1, .32, 1)' });
+    void deckIntro.finished.then(() => {
+      photoCases.forEach((_, number) => { void fillCase(number).catch(() => {}); });
+    });
   } catch {
     albumStart.textContent = 'Попробовать открыть фотографии ещё раз';
   } finally {
@@ -132,41 +216,22 @@ albumStart.addEventListener('click', async () => {
   }
 });
 
-function animatePrint(direction) {
-  if (reduced.matches) return null;
-  return print.animate([
-    { opacity: .38, transform: `translate(${direction * 17}%, 9%) rotate(${direction * 9}deg) rotateY(${direction * 24}deg)` },
-    { opacity: 1, transform: 'none' }
-  ], { duration: 570, easing: easeOut });
-}
-
-async function renderPhoto(number) {
-  const url = await loadPhoto(number);
-  const description = metadata.photos[number];
-  photo.src = url;
-  photo.alt = description;
-  byId('caption').textContent = description;
-  index = number;
-  byId('counter').textContent = `${number + 1} / ${metadata.photos.length}`;
-  previous.disabled = number === 0;
-  next.disabled = number === metadata.photos.length - 1;
-  toGift.hidden = !next.disabled;
-  if (!next.disabled) void loadPhoto(number + 1).catch(() => {});
-}
-
-async function turn(direction) {
-  const number = index + direction;
-  if (turning || currentScene.id !== 'album' || number < 0 || number >= metadata.photos.length) return;
+async function selectPhoto(number) {
+  if (turning || currentScene.id !== 'album' || number === index || !photoCases[number]) return;
   turning = true;
   try {
-    await renderPhoto(number);
-    const animation = animatePrint(direction);
-    if (animation) await animation.finished;
+    await fillCase(number);
+    index = number;
+    arrangeCases();
   } catch {
     byId('counter').textContent = 'Нажми ещё раз';
   } finally {
     turning = false;
   }
+}
+
+function turn(direction) {
+  return selectPhoto(index + direction);
 }
 
 previous.addEventListener('click', () => void turn(-1));
@@ -222,6 +287,7 @@ async function openFinalGift() {
 
 byId('replay').addEventListener('click', async () => {
   runner.classList.remove('ready');
+  byId('intro').classList.remove('gift-zoom');
   introGift.classList.remove('opening');
   lastGift.classList.remove('opening');
   lastGift.hidden = false;
