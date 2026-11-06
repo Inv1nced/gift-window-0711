@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#25213f">
+<title>Подарок для мамы</title>
+<link rel="icon" href="assets/gift.svg">
+<link rel="stylesheet" href="card.css">
+<script src="card.js" defer></script>
+</head>
+<body>
+<svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <symbol id="gift-box" viewBox="0 0 120 112">
+    <path fill="#a32e55" d="M16 45h87l-5 58H22Z"/>
+    <path fill="#d95176" d="M16 45h72l-3 58H22Z"/>
+    <path fill="#ee7395" d="M19 56h67v5H20z"/>
+    <path fill="#f6c37b" d="M47 45h17v58H48Z"/>
+    <path fill="#ffdda2" d="M50 45h5v58h-5z"/>
+    <path fill="#82203e" opacity=".27" d="M17 48h85l-1 8H18Z"/>
+  </symbol>
+  <symbol id="gift-lid" viewBox="0 0 120 112">
+    <path d="M59 34C37 32 24 21 31 12c7-10 24 3 29 20 7-20 23-30 31-21 9 11-8 22-31 23Z" fill="none" stroke="#f7c27e" stroke-width="7" stroke-linecap="round"/>
+    <path d="M61 31c-11 8-15 14-18 27m18-27c12 6 18 13 20 26" fill="none" stroke="#f7c27e" stroke-width="6"/>
+    <path fill="#a72c56" d="M10 34h100v18H10Z"/>
+    <path fill="#f37e9e" d="M10 32h100l-6 6H14Z"/>
+    <path fill="#de5f85" d="M10 38h83v14H10Z"/>
+    <path fill="#ffd49a" d="M47 32h17v20H47Z"/>
+  </symbol>
+</svg>
+
+<main>
+<section id="intro" class="intro scene" aria-label="Рабочий стол Windows XP">
+  <div class="xp-window">
+    <div class="xp-title"><img src="assets/gift.svg" alt=""> Подарок для мамы <span aria-hidden="true"><i>–</i><i>□</i><i>×</i></span></div>
+    <div class="xp-desktop">
+      <div class="runner">
+        <div class="say" aria-hidden="true">Мам, это тебе!</div>
+        <div class="sprite">
+          <svg class="figure" viewBox="0 0 210 230" aria-hidden="true">
+            <defs><clipPath id="haircut"><path d="M258 485C240 443 269 415 300 407C349 385 395 414 411 446L426 498L424 535L432 570L437 592L427 621L405 643L376 647L345 625L322 589L307 567L289 565L271 545Z"/></clipPath></defs>
+            <ellipse cx="99" cy="217" rx="71" ry="9" fill="#233616" opacity=".37"/>
+            <g class="leg leg-left"><path d="M90 153 78 187 78 211" fill="none" stroke="#293454" stroke-width="19" stroke-linecap="round"/><path d="M70 204h16l12 10c2 3 0 6-4 6H66v-12Z" fill="#f6efd8"/><path d="M66 216h32v5H66Z" fill="#293454"/></g>
+            <g class="leg leg-right"><path d="M110 154 120 185 119 209" fill="none" stroke="#39486d" stroke-width="20" stroke-linecap="round"/><path d="M111 203h16l13 10c3 3 0 7-4 7h-29v-11Z" fill="#fff6e2"/><path d="M107 216h33v5h-33Z" fill="#293454"/></g>
+            <path d="M71 108Q61 120 57 145" fill="none" stroke="#285d48" stroke-width="15" stroke-linecap="round"/>
+            <path d="M55 143q-8 12 1 17 11 2 9-13Z" fill="#e3a173"/>
+            <path d="M80 95Q102 88 120 103L128 159Q103 174 68 161L70 114Z" fill="#439667" stroke="#245439" stroke-width="4"/>
+            <path d="M74 143l27-41h12l-12 51H89l5-20-13 18Z" fill="#d3e95f"/>
+            <g transform="translate(-57 -173) scale(.43)"><image id="head" width="819" height="1024" clip-path="url(#haircut)"/></g>
+            <g class="offer"><path d="M116 114q11 15 23 20l19-6" fill="none" stroke="#3e8e5f" stroke-width="16" stroke-linecap="round"/><path d="M155 121q13-9 20 2 3 8-14 12Z" fill="#f4b184"/></g>
+          </svg>
+          <button id="introGift" class="intro-gift gift-button" type="button" disabled aria-label="Открыть подарок">
+            <span class="gift" aria-hidden="true"><svg><use href="#gift-box"/></svg><svg class="lid"><use href="#gift-lid"/></svg></span>
+            <span class="xp-button">Открыть подарок</span>
+          </button>
+        </div>
+      </div>
+      <div id="introError" class="xp-error" hidden><h1>Подарок для мамы</h1><p id="introErrorText"></p></div>
+      <div class="xp-taskbar" aria-hidden="true"><span class="xp-start"><span class="flag"></span>пуск</span><span class="xp-task">🎁 &nbsp; Подарок для мамы</span><time>07.11</time></div>
+    </div>
+  </div>
+</section>
+
+<div id="story" class="story" hidden>
+  <div class="decoration" aria-hidden="true">
+    <svg viewBox="0 0 1000 195" preserveAspectRatio="none">
+      <path d="M-24 0Q170 185 500 61Q830 185 1024 0" fill="none" stroke="#e9af9a" stroke-opacity=".7" stroke-width="2"/>
+      <g fill="#f4d8a7"><circle cx="62" cy="57" r="4"/><circle cx="203" cy="102" r="4"/><circle cx="353" cy="100" r="4"/><circle cx="500" cy="61" r="4"/><circle cx="647" cy="100" r="4"/><circle cx="797" cy="102" r="4"/><circle cx="938" cy="57" r="4"/></g>
+      <path fill="#e5a0a4" d="m92 70 49 18-31 32Zm232 34 48-7-18 44Zm205-34 49 13-30 33Zm232 37 48-4-21 43Z"/>
+      <path fill="#f4d8a7" d="m157 92 49 10-28 38Zm231 1 46-12-13 44Zm203-7 49 13-30 34Zm232 14 47-14-13 44Z"/>
+      <path fill="#baa7d1" d="m220 103 50 3-25 40Zm229-26 41-13-11 41Zm204 24 50 4-26 40Zm231-20 45-18-8 46Z"/>
+    </svg>
+  </div>
+  <section id="letterCover" class="scene chapter cover" aria-labelledby="coverTitle">
+    <div class="chapter-inner">
+      <span class="tiny-star" aria-hidden="true">✦</span>
+      <h1 id="coverTitle" tabindex="-1">Для тебя, мама</h1>
+      <button id="unroll" class="scroll-trigger" type="button">
+        <span class="scroll-roll" aria-hidden="true"><span></span><i>♥</i></span>
+        <span class="paper-button">Развернуть письмо</span>
+      </button>
+    </div>
+  </section>
+  <section id="letter" class="scene chapter letter" aria-labelledby="letterTitle" hidden>
+    <article class="letter-paper">
+      <span class="letter-heart" aria-hidden="true">♡</span>
+      <h1 id="letterTitle" tabindex="-1">Дорогая мама,</h1>
+      <div id="letterText"></div>
+      <div class="signature">Твой Олег</div>
+      <button id="albumStart" class="paper-button" type="button">Наши фотографии</button>
+    </article>
+  </section>
+  <section id="album" class="scene chapter album" aria-labelledby="albumTitle" hidden>
+    <div class="chapter-inner">
+      <h1 id="albumTitle" tabindex="-1">Наши фотографии</h1>
+      <div class="photo-deck" id="photoDeck">
+        <span class="deck-leaf leaf-one" aria-hidden="true"></span>
+        <span class="deck-leaf leaf-two" aria-hidden="true"></span>
+        <figure class="print" id="print">
+          <div class="print-window"><img id="photo" alt=""></div>
+          <figcaption id="caption"></figcaption>
+        </figure>
+      </div>
+      <nav class="album-controls" aria-label="Листать фотографии">
+        <button id="previous" class="round-button" type="button" aria-label="Предыдущая фотография">‹</button>
+        <output id="counter" aria-live="polite"></output>
+        <button id="next" class="round-button" type="button" aria-label="Следующая фотография">›</button>
+      </nav>
+      <button id="toGift" class="last-gift-link" type="button" hidden><img src="assets/gift.svg" alt=""> И ещё кое-что…</button>
+    </div>
+  </section>
+  <section id="finale" class="scene chapter finale" aria-label="Последний подарок" hidden>
+    <div class="chapter-inner">
+      <h1 id="lastTitle" tabindex="-1">И ещё кое-что…</h1>
+      <div class="final-stage">
+        <div id="lastGift" class="last-gift gift-button" aria-hidden="true">
+          <span class="gift" aria-hidden="true"><svg><use href="#gift-box"/></svg><svg class="lid"><use href="#gift-lid"/></svg></span>
+        </div>
+        <div id="flowers" class="flowers" hidden>
+          <div class="flower-glow"></div>
+          <img src="assets/bouquet.jpg" alt="Букет из розовых, кремовых и лиловых цветов с нежно-розовой лентой">
+          <div id="petals" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div id="wish" class="wish" hidden>
+        <h1 tabindex="-1" id="wishTitle">С днём рождения, мама!</h1>
+        <p>Очень тебя люблю.</p>
+        <button id="replay" class="text-button" type="button">Посмотреть ещё раз</button>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+<div id="fade" aria-hidden="true"></div>
+</body>
+</html>
