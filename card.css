@@ -212,7 +212,7 @@ h1 { margin: 0; font-weight: 400; font-size: clamp(2.5rem, 7vw, 4.8rem); line-he
 .last-gift-link img { width: 28px; height: 28px; }
 .finale { padding-top: clamp(52px, 10svh, 106px); }
 .finale h1 { font-size: clamp(2.3rem, 6.6vw, 4.5rem); }
-.final-stage { display: grid; place-items: center; position: relative; perspective: 1000px; }
+.final-stage { display: grid; place-items: center; position: relative; }
 .last-gift { width: 130px; margin: 28px 0; gap: 12px; }
 .last-gift.opening { animation: box-away .72s var(--ease-out) both; }
 .flowers { position: relative; width: min(86vw, 510px, 55svh); margin: 0 auto; }
